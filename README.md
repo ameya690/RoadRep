@@ -1,100 +1,80 @@
-# RoadRep - Road Representation Learning
+# 🚗 RoadRep-LoRA: Lightweight CLIP Fine-Tuning for Driving Scenes
 
-RoadRep is a project for learning road representations using deep learning models, specifically focusing on CLIP-based architectures. This repository contains the code for model inference, training, and deployment.
+**RoadRep-LoRA** is a compact, domain-adapted CLIP model fine-tuned on real-world dash-cam frames using LoRA (Low-Rank Adaptation). It specializes in driving scenes — roads, weather, traffic — and enables CPU-friendly image-text retrieval, classification, and downstream embedding use cases.
 
-## Project Structure
+---
 
-```
-RoadRep/
-├── models/                  # ONNX model files
-├── src/                     # Source code
-│   ├── __init__.py         # Package initialization
-│   ├── data_loader.py      # Data loading and preprocessing
-│   ├── model.py            # Model loading and inference
-│   ├── inference.py        # Inference pipeline
-│   ├── train.py            # Model training
-│   └── utils.py            # Utility functions
-├── configs/                # Configuration files
-├── requirements.txt        # Python dependencies
-└── README.md              # This file
-```
+## 📦 Features
 
-## Installation
+- 🔎 **Zero-shot scene classification** (e.g. "foggy highway")
+- 🧠 **Efficient LoRA fine-tuning** on top of `openai/clip-vit-base-patch32`
+- 💡 Fine-tuned on auto-captioned BDD10K samples
+- 📉 Quantized ONNX support for CPU inference (~6 FPS on Colab CPU)
+- 🐳 Dockerfile included for portable deployment
 
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd RoadRep
-   ```
+---
 
-2. Create a virtual environment (recommended):
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-## Usage
-
-### Inference
-
-To run inference on an image:
+## 🚀 Inference Example
 
 ```bash
-python -m src.inference --image_path path/to/your/image.jpg --model_dir models/
-```
-
-Optional arguments:
-- `--quantized`: Use the quantized model (smaller, faster, slightly less accurate)
-- `--output_path`: Path to save the visualization
-
-### Training
-
-1. Prepare your dataset and create a configuration file (see `configs/example_config.yaml`).
-
-2. Run training:
-   ```bash
-   python -m src.train --config configs/your_config.yaml --experiment_name my_experiment
-   ```
-
-### Docker
-
-To build and run the Docker container:
-
-```bash
-# Build the Docker image
 docker build -t roadrep .
+docker run -v $(pwd):/app roadrep python inference.py test.jpg
 
-# Run the container
-docker run --gpus all -p 8000:8000 roadrep
-```
 
-## Model Details
+---
 
-The project uses a CLIP-based model for road representation learning. The model is provided in two versions:
-- `roadrep_clip.onnx`: Full-precision model (larger, more accurate)
-- `roadrep_clip_int8.onnx`: Quantized model (smaller, faster, slightly less accurate)
+## 🧾 Model Card (`model_card.md`)
 
-## License
+```markdown
+# 🧠 RoadRep-LoRA — Model Card
 
-[Your License Here]
+**Model Name**: `roadrep-clip-vit-b32-lora`  
+**Base Model**: `openai/clip-vit-base-patch32`  
+**Fine-tuning Method**: LoRA adapters (rank=8)  
+**Training Data**: ~5,000 real-world driving scene frames from BDD10K, auto-captioned using BLIP  
+**Input Format**: Pairs of (image, generated description)  
+**Use Case**: Embedding-based retrieval, zero-shot classification, downstream feature extraction for perception
 
-## Citation
+---
 
-If you use this project in your research, please cite:
+## 💡 Intended Use
 
-```
-[Your Citation Here]
-```
+This model is designed for road-scene representation learning and retrieval tasks in:
+- Perception modules of autonomous vehicles
+- Scene understanding for urban infrastructure
+- Dash-cam video summarization or tagging
+- Traffic weather/condition classification
 
-## Contributing
+---
 
-Contributions are welcome! Please open an issue or submit a pull request.
+## ⚠️ Limitations
 
-## Contact
+- Trained on a subset of driving data (~5k samples)
+- May not generalize well to synthetic or non-road imagery
+- "Foggy" and "night" concepts depend on captioner accuracy
 
-[Your Contact Information]
+---
+
+## 🧪 Evaluation Metrics
+
+- Retrieval: Top-5 similarity spread improves post-finetuning
+- Cosine sim scores for `"highway"` queries improve from ~0.12 → ~0.42
+- Inference speed (FP32): ~6 FPS on Colab CPU
+- Inference speed (GPU): ~100+ FPS on T4 (estimated)
+
+---
+
+## 🧊 Deployment
+
+- Exported to ONNX (`roadrep_clip.onnx`)
+- Quantized INT8 version optional (`roadrep_clip_int8.onnx`)
+- Runs on `onnxruntime` with minimal dependencies
+
+---
+
+## 🔗 Links
+
+- [Training Logs — W&B Project](https://wandb.ai/ameya690-san-jose-state-university/roadrep-lora)
+- [Demo Retrieval Query Screenshot](#)
+- [Docker Deployment Guide](#)
+
