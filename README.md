@@ -76,5 +76,6 @@ This model is designed for road-scene representation learning and retrieval task
 
 - [Training Logs — W&B Project](https://wandb.ai/ameya690-san-jose-state-university/roadrep-lora)
 - [Demo Retrieval Query Screenshot]
-  <img src="RoadRep_img.png" alt="Koe Logo" width="300"/>
+  
+  <img src="RoadRep_img.png" alt="Demo Logo" width="700"/>
 
