@@ -16,16 +16,16 @@
 
 ## 🚀 Inference Example
 
-```bash
+```
 docker build -t roadrep .
 docker run -v $(pwd):/app roadrep python inference.py test.jpg
-
+```
 
 ---
 
 ## 🧾 Model Card (`model_card.md`)
 
-```markdown
+
 # 🧠 RoadRep-LoRA — Model Card
 
 **Model Name**: `roadrep-clip-vit-b32-lora`  
@@ -75,6 +75,6 @@ This model is designed for road-scene representation learning and retrieval task
 ## 🔗 Links
 
 - [Training Logs — W&B Project](https://wandb.ai/ameya690-san-jose-state-university/roadrep-lora)
-- [Demo Retrieval Query Screenshot](#)
-- [Docker Deployment Guide](#)
+- [Demo Retrieval Query Screenshot]
+  <img src="RoadRep_img.png" alt="Koe Logo" width="300"/>
 
